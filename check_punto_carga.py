@@ -12,7 +12,7 @@ def obtener_estado_cargador():
         # 🔹 Aquí debes encontrar el elemento que indica la disponibilidad (esto depende de la estructura de la web).
         estado = soup.find("statusCode")  
         
-        if estado and "libre" in estado.text.lower():
+        if estado and "OCCUPIED" in estado.text.lower():
             return True  # ✅ Hay un cargador libre
         else:
             return False  # ❌ No hay cargadores libres
