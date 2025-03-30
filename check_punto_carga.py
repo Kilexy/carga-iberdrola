@@ -6,12 +6,7 @@ import json
 url = "https://www.iberdrola.es/o/webclipb/Iberdrola/puntosrecargacontroller/gerDatosPuntoRecarga"
 
 # Datos de la solicitud POST (reemplaza con tus propios datos)
-datos = {
-    # Añade aquí los datos necesarios para la solicitud POST
-    # Por ejemplo:
-    "idPuntoRecarga": "12345",
-    "otroDato": "valor"
-}
+datos = {"dto":{"cuprId":[97896]},"language":"es"}
 
 # Realizar la solicitud POST
 response = requests.post(url, json=datos)
