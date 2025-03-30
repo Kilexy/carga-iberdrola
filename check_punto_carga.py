@@ -1,25 +1,28 @@
-import time
-import sys
+import requests
+from bs4 import BeautifulSoup
 
-def verificar_punto_carga():
-    print("🔄 Script iniciado en GitHub Actions...", flush=True)
-    start_time = time.time()
+URL = "https://www.iberdrola.es/o/webclipb/iberdrola/puntosrecargacontroller/getDatosPuntoRecarga"
 
-    while True:
-        elapsed_time = time.time() - start_time
-        if elapsed_time > 300:  # 🔹 Detener después de 5 minutos
-            print("⏹️ Deteniendo script para evitar bloqueos.", flush=True)
-            break
+def obtener_estado_cargador():
+    response = requests.get(URL, headers={"User-Agent": "Mozilla/5.0"})
+    
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.text, "html.parser")
+        
+        # 🔹 Aquí debes encontrar el elemento que indica la disponibilidad (esto depende de la estructura de la web).
+        estado = soup.find("statusCode")  
+        
+        if estado and "libre" in estado.text.lower():
+            return True  # ✅ Hay un cargador libre
+        else:
+            return False  # ❌ No hay cargadores libres
+    else:
+        print("⚠️ Error al acceder a la web de Iberdrola.")
+        return False
 
-        print("⏳ Revisando disponibilidad de puntos de carga...", flush=True)
-
-        # 🔹 Aquí iría el código que revisa la API o la web de Iberdrola.
-        # 🔹 Si hay cargadores libres, enviaría la notificación.
-
-        print("⛔ No hay puntos libres. Reintentando en 30 segundos...", flush=True)
-        sys.stdout.flush()  # 🔹 Forzar la salida inmediata en GitHub Actions
-
-        time.sleep(30)  # Espera 30 segundos antes de volver a verificar
-
-# Ejecutar la función
-verificar_punto_carga()
+# Prueba si funciona:
+print("🔍 Verificando disponibilidad...")
+if obtener_estado_cargador():
+    print("✅ Hay un cargador libre")
+else:
+    print("⛔ No hay cargadores libres")
